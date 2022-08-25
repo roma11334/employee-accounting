@@ -3,8 +3,9 @@ import SearchPanel from '../search-panel/search-panel';
 import AppFilter from '../app-filter/app-filter';
 import EmployersList from '../employers-list/employers-list';
 import EmployersAddForm from '../employers-add-form/employers-add-form'
-import {Component} from 'react'
+import React, {Component} from 'react'
 import styled from 'styled-components';
+import {Container} from 'react-bootstrap';
 
 import './app.css';
 
@@ -61,6 +62,8 @@ class WhoAmI extends Component  {
     render() {
         const {name, surname, link} = this.props;
         const {position, years} = this.state;
+       
+
         return (
             <EmpItem active>
                 <Button onClick={this.nextYear}>+++</Button>
@@ -81,9 +84,64 @@ const Wrapper = styled.div`
     width: 600px;
     margin: 80px auto 0 auto;
 `;
+
+const DynamicGreating = (props) => {
+    return (
+        <div className={'mb-3 p-3 border border-' + props.color}>
+            {
+                React.Children.map(props.children, child => {
+                    return React.cloneElement(child, {className: 'shadow p-3 m-3 border rounded'})
+                })
+            }
+        </div>
+    )
+}
+
+class Form extends Component {
+    // myRef = React.createRef();
+    
+
+    // componentDidMount() {
+    //     this.myRef.current.focus();
+    // }
+
+    setInputRef = elem => {
+        this.myRef = elem;
+    }
+
+    focusFirstTI = () => {
+        if(this.myRef) {
+            this.myRef.focus();
+        }
+        
+    }
+
+    render() {
+        return (
+            <Container>
+                <form className="w-50 border mt-5 p-3 m-auto">
+                    <div className="mb-3">
+                        <label htmlFor="exampleFormControlInput1" className="form-label">Email address</label>
+                        <input ref={this.setInputRef} type="email" className="form-control" id="exampleFormControlInput1" placeholder="name@example.com"/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="exampleFormControlTextarea1" className="form-label">Example textarea</label>
+                        <textarea onClick={this.focusFirstTI} className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                </form>
+            </Container>
+        )
+    }
+}
+
 function App() {
     return (
         <Wrapper className="app">
+            <Form/>
+            <DynamicGreating color={'primary'}>
+                <h2>Hello motherfucker</h2>
+                <h2>Fuck you bitch sosi kirpich</h2>
+            </DynamicGreating>
             <WhoAmI name='John' surname='Smith' link='facebook.com'/>
             <WhoAmI name='Alex' surname='Shepard' link='vk.com'/>
         </Wrapper>
